@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const userAdress = require('../models/User');
+const UserAdress = require('../models/UserAdress');
 
 class UserController {
   async create(req, res) {
@@ -10,7 +10,7 @@ class UserController {
       password: req.body.password,
     });
 
-    const userAdress = await User.create({});
+    const userAdress = await UserAdress.create({});
 
     res.send(user);
   }

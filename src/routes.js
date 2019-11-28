@@ -15,6 +15,7 @@ class Router {
   userRoutes() {
     this.routes.get('/v1/users/:userId', (req, res) => res.send('ok'));
     this.routes.post('/v1/users', UserController.create);
+    this.routes.get('/v1/users', UserController.getAllUsers);
   }
 }
 

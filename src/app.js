@@ -1,3 +1,4 @@
+require('./database');
 require('express-async-errors');
 const Youch = require('youch');
 const cookieParser = require('cookie-parser');
@@ -32,7 +33,6 @@ class App {
         const errors = await new Youch(err, req).toJSON();
         return res.status(500).json(errors);
       }
-
       return res.status(500).json({ error: '$ internal server error!' });
     });
   }

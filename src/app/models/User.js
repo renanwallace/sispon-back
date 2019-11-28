@@ -8,6 +8,7 @@ class User extends Model {
       {
         id: { primaryKey: true, type: Sequelize.INTEGER, autoIncrement: true },
         name: Sequelize.STRING,
+        company: Sequelize.BOOLEAN,
         email: Sequelize.STRING,
         cpf: Sequelize.STRING,
         password: Sequelize.VIRTUAL,
@@ -30,7 +31,7 @@ class User extends Model {
   }
 
   // static associate(models) {
-  //   this.hasMany(models.UserAdress, { foreignKey: 'user_id', as: 'addresses' });
+  //   this.hasMany(models.UserAdress, { foreignKey: 'user_id', as: 'address' });
   // }
 
   checkPassword(password) {

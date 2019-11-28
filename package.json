@@ -44,7 +44,7 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "queue": "nodemon src/queue.js",
-    "create-migration": "yarn sequelize migration:create --name=",
+    "create-migration": "yarn sequelize migration:create",
     "run-migration": "yarn sequelize db:migrate",
     "debug": "node --inspect -r sucrase/register src/server.js",
     "drop-migrations": "yarn sequelize db:migrate:undo"

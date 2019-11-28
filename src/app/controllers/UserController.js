@@ -1,19 +1,18 @@
 const User = require('../models/User');
+const db = require('../../database');
 
 class UserController {
   async create(req, res) {
-    console.log(req.body);
+    console.log(db);
     const user = await User.create({
       name: req.body.name,
       email: req.body.email,
       cpf: req.body.cpf,
-      birthday: req.body.birthday,
-      company: req.body.company,
       password: req.body.password,
     });
-    console.log(user);
+    // console.log(user);
 
-    res.json(user);
+    res.send({ User });
   }
 
   async findUserByCpf(req, res) {

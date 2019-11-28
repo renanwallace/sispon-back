@@ -1,10 +1,21 @@
 const express = require('express');
 const UserController = require('./app/controllers/UserController');
 
-const routes = express.Router();
+class Router {
+  constructor() {
+    this.routes = express.Router();
+    this.ping();
+    this.userRoutes();
+  }
 
-routes.get('/', (req, res) => res.json({ msg: 'deu certo' }));
-routes.get('/v1/users/:userId', (req, res) => res.send('ok'));
-routes.post('/v1/users', UserController.create);
+  ping() {
+    this.routes.get('/', (req, res) => res.json({ msg: 'ok' }));
+  }
 
-module.exports = routes;
+  userRoutes() {
+    this.routes.get('/v1/users/:userId', (req, res) => res.send('ok'));
+    this.routes.post('/v1/users', UserController.create);
+  }
+}
+
+module.exports = new Router().routes;

@@ -15,6 +15,7 @@ class App {
     this.server = express();
     this.middleware();
     this.routes();
+    this.exceptionHandler();
     debug(`${pkg.name}:${pkg.main}`);
   }
 

@@ -1,5 +1,6 @@
 const express = require('express');
 const UserController = require('./app/controllers/UserController');
+const UserValidation = require('./app/middleware/UserValidation');
 
 class Router {
   constructor() {
@@ -13,9 +14,13 @@ class Router {
   }
 
   userRoutes() {
-    this.routes.get('/v1/users/:userId', (req, res) => res.send('ok'));
-    this.routes.post('/v1/users', UserController.create);
-    this.routes.get('/v1/users', UserController.getAllUsers);
+    this.routes.get('/users/:userId', (req, res) => res.send('ok'));
+    this.routes.get('/users', UserController.index);
+    this.routes.post(
+      '/users',
+      UserValidation.validateInsertUser,
+      UserController.store
+    );
   }
 }
 

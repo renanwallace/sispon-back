@@ -6,11 +6,19 @@ class User extends Model {
     // setting table columns
     super.init(
       {
-        id: { primaryKey: true, type: Sequelize.INTEGER, autoIncrement: true },
-        name: Sequelize.STRING,
-        company: Sequelize.BOOLEAN,
-        email: Sequelize.STRING,
-        cpf: Sequelize.STRING,
+        id: {
+          primaryKey: true,
+          type: Sequelize.INTEGER,
+          autoIncrement: true,
+        },
+        fun_id: Sequelize.BOOLEAN,
+        us_admin: Sequelize.BOOLEAN,
+        us_company: Sequelize.BOOLEAN,
+        us_tel: Sequelize.STRING,
+        us_name: Sequelize.STRING,
+        us_email: Sequelize.STRING,
+        us_cpf: Sequelize.STRING,
+        us_rg: Sequelize.STRING,
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
         created_at: Sequelize.DATE,
@@ -18,6 +26,7 @@ class User extends Model {
       },
       {
         sequelize,
+        tableName: 'users',
       }
     );
 
@@ -30,9 +39,12 @@ class User extends Model {
     return this;
   }
 
-  // static associate(models) {
-  //   this.hasMany(models.UserAdress, { foreignKey: 'user_id', as: 'address' });
-  // }
+  static associate(models) {
+    this.hasOne(models.UserAddress, {
+      foreignKey: 'us_id',
+      as: 'address',
+    });
+  }
 
   checkPassword(password) {
     return bcrypt.compare(password, this.password_hash);

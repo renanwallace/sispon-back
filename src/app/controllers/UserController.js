@@ -1,18 +1,66 @@
 const User = require('../models/User');
-const UserAdress = require('../models/UserAdress');
+const UserAddress = require('../models/UserAddress');
 
 class UserController {
-  async create(req, res) {
-    const user = await User.create({
-      name: req.body.name,
-      email: req.body.email,
-      cpf: req.body.cpf,
-      password: req.body.password,
+  async store(req, res) {
+    const {
+      fun_id,
+      us_admin,
+      us_company,
+      us_tel,
+      us_name,
+      us_email,
+      us_cpf,
+      us_rg,
+      password,
+      address,
+    } = req;
+    const user = await User.create(
+      {
+        fun_id,
+        us_admin,
+        us_company,
+        us_tel,
+        us_name,
+        us_email,
+        us_cpf,
+        us_rg,
+        password,
+        address,
+      },
+      {
+        include: [
+          {
+            model: UserAddress,
+            as: 'address',
+          },
+        ],
+      }
+    ).catch(err => {
+      console.error(err);
+    });
+    res.send(user);
+  }
+
+  async index({ res }) {
+    const user = await User.findAll({
+      order: ['id'],
+      include: [
+        {
+          model: UserAddress,
+          as: 'address',
+        },
+      ],
     });
 
-    const userAdress = await UserAdress.create({});
+    if (!user) {
+      return res.status(400).json({
+        error: '$ User not found!',
+        user_message: 'Usuário não encontrado!',
+      });
+    }
 
-    res.send(user);
+    return res.json(user);
   }
 
   async findUserByCpf(req, res) {

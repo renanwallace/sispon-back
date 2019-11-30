@@ -8,18 +8,40 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      name: {
-        type: Sequelize.STRING,
+      fun_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
-      email: {
-        type: Sequelize.STRING,
+      us_admin: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      us_tel: {
+        type: Sequelize.STRING(100),
         allowNull: false,
         unique: true,
       },
-      cpf: {
-        type: Sequelize.STRING,
+      us_company: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      us_name: {
+        type: Sequelize.STRING(100),
         allowNull: false,
+      },
+      us_email: {
+        type: Sequelize.STRING(120),
+        allowNull: false,
+        unique: true,
+      },
+      us_cpf: {
+        type: Sequelize.STRING(15),
+        allowNull: false,
+        unique: true,
+      },
+      us_rg: {
+        type: Sequelize.STRING(15),
+        allowNull: true,
         unique: true,
       },
       password_hash: {

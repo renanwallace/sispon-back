@@ -6,9 +6,10 @@ const bodyParser = require('body-parser');
 const debug = require('debug');
 const logger = require('morgan');
 const express = require('express');
+const cors = require('cors');
 const routes = require('./routes');
 const pkg = require('../package.json');
-const ignoreFavicon = require('./app/middleware/IgnoreFavicon');
+const ignoreFavicon = require('./app/middlewares/IgnoreFavicon');
 
 class App {
   constructor() {
@@ -26,6 +27,7 @@ class App {
     this.server.use(bodyParser.json());
     this.server.use(bodyParser.urlencoded({ extended: true }));
     this.server.use(cookieParser());
+    this.server.use(cors());
   }
 
   exceptionHandler() {
@@ -34,7 +36,10 @@ class App {
         const errors = await new Youch(err, req).toJSON();
         return res.status(500).json(errors);
       }
-      return res.status(500).json({ error: '$ internal server error!' });
+      return res.status(500).json({
+        error: '$ internal server error!',
+        user_message: 'Erro interno, contate o suporte',
+      });
     });
   }
 

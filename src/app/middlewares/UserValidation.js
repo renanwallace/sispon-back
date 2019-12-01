@@ -7,6 +7,38 @@ class Validation {
     autoBind(this);
   }
 
+  async validateUserSession(req, res, next) {
+    const schema = Yup.object().shape({
+      us_email: Yup.string()
+        .email()
+        .required(),
+      password: Yup.string().required(),
+    });
+
+    const { us_email, password } = req.body;
+    const items = [
+      { key: this.variableToString({ us_email }), value: us_email },
+      { key: this.variableToString({ password }), value: password },
+    ];
+
+    const promises = items.map(async item =>
+      Yup.reach(schema, item.key)
+        .validate(item.value)
+        .catch(err => {
+          throw res.status(400).json({
+            error: `$ ${item.key} - ${err.message}`,
+          });
+        })
+    );
+
+    await Promise.all(promises);
+
+    req.us_email = us_email;
+    req.password = password;
+
+    return next();
+  }
+
   async validateInsertUser(req, res, next) {
     const schema = Yup.object().shape({
       fun_id: Yup.number().required(),
@@ -20,14 +52,14 @@ class Validation {
         .min(4)
         .required(),
       us_email: Yup.string()
-        .email()
+        .email('$ Email Inválido')
         .required(),
       us_cpf: Yup.string()
-        .min(11)
-        .max(12),
+        .min(11, 'CPF Inválido')
+        .max(12, 'CPF Inválido'),
       us_rg: Yup.string()
-        .max(8)
-        .min(4)
+        .max(10, 'RG Inválido')
+        .min(4, 'RG Inválido')
         .required(),
       password: Yup.string()
         .min(6)
@@ -73,6 +105,7 @@ class Validation {
         .catch(err => {
           throw res.status(400).json({
             error: `$ ${item.key} - ${err.message}`,
+            user_message: err.message,
           });
         })
     );
@@ -89,6 +122,34 @@ class Validation {
     req.us_rg = us_rg;
     req.password = password;
     req.address = address;
+    next();
+  }
+
+  async validateFindByCPF(req, res, next) {
+    const schema = Yup.object().shape({
+      us_cpf: Yup.string()
+        .min(10)
+        .max(12)
+        .required(),
+    });
+
+    const { us_cpf } = req.params;
+
+    const items = [{ key: this.variableToString({ us_cpf }), value: us_cpf }];
+
+    const promises = items.map(async item =>
+      Yup.reach(schema, item.key)
+        .validate(item.value)
+        .catch(err => {
+          throw res.status(400).json({
+            error: `$ ${item.key} - ${err.message}`,
+          });
+        })
+    );
+
+    await Promise.all(promises);
+
+    req.us_cpf = us_cpf;
 
     next();
   }

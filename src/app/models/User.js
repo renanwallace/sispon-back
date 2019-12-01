@@ -44,6 +44,12 @@ class User extends Model {
       foreignKey: 'us_id',
       as: 'address',
     });
+
+    this.belongsToMany(models.UserDevice, {
+      foreignKey: 'us_id',
+      as: 'devices',
+      through: 'user_devices',
+    });
   }
 
   checkPassword(password) {

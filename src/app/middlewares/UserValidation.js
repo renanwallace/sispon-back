@@ -48,6 +48,10 @@ class Validation {
         .min(7)
         .max(14)
         .required(),
+      us_other_tel: Yup.string()
+        .min(7)
+        .max(14)
+        .required(),
       us_name: Yup.string()
         .min(4)
         .required(),
@@ -78,6 +82,7 @@ class Validation {
       us_admin,
       us_company,
       us_tel,
+      us_other_tel,
       us_name,
       us_email,
       us_cpf,
@@ -91,6 +96,7 @@ class Validation {
       { key: this.variableToString({ us_admin }), value: us_admin },
       { key: this.variableToString({ us_company }), value: us_company },
       { key: this.variableToString({ us_tel }), value: us_tel },
+      { key: this.variableToString({ us_other_tel }), value: us_other_tel },
       { key: this.variableToString({ us_name }), value: us_name },
       { key: this.variableToString({ us_email }), value: us_email },
       { key: this.variableToString({ us_cpf }), value: us_cpf },
@@ -116,6 +122,7 @@ class Validation {
     req.us_admin = us_admin;
     req.us_company = us_company;
     req.us_tel = us_tel;
+    req.us_other_tel = us_other_tel;
     req.us_name = us_name;
     req.us_email = us_email;
     req.us_cpf = us_cpf;
@@ -150,6 +157,47 @@ class Validation {
     await Promise.all(promises);
 
     req.us_cpf = us_cpf;
+
+    next();
+  }
+
+  async validatePostDevice(req, res, next) {
+    const schema = Yup.object().shape({
+      us_cpf: Yup.string()
+        .min(10, 'CPF Inválido')
+        .max(12, 'CPF Inválido')
+        .required('O CPF é obrigatório'),
+      imei: Yup.string().required('O IMEI é obrigatório'),
+      service_id: Yup.string().required('Selecione o tipo de serviço'),
+      number: Yup.string().required('O chip é obrigatório'),
+    });
+
+    const { us_cpf } = req.params;
+    const { imei, service_id, number } = req.body;
+
+    const items = [
+      { key: this.variableToString({ us_cpf }), value: us_cpf },
+      { key: this.variableToString({ imei }), value: imei },
+      { key: this.variableToString({ service_id }), value: service_id },
+      { key: this.variableToString({ number }), value: number },
+    ];
+
+    const promises = items.map(async item =>
+      Yup.reach(schema, item.key)
+        .validate(item.value)
+        .catch(err => {
+          throw res.status(400).json({
+            error: `$ ${item.key} - ${err.message}`,
+          });
+        })
+    );
+
+    await Promise.all(promises);
+
+    req.us_cpf = us_cpf;
+    req.imei = imei;
+    req.service_id = service_id;
+    req.number = number;
 
     next();
   }

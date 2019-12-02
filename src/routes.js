@@ -1,5 +1,6 @@
 const express = require('express');
 const UserController = require('./app/controllers/UserController');
+const DeviceController = require('./app/controllers/DeviceController');
 const UserValidation = require('./app/middlewares/UserValidation');
 const SessionController = require('./app/controllers/SessionController');
 const authMiddleware = require('./app/middlewares/auth');
@@ -23,7 +24,7 @@ class Router {
   }
 
   middleware() {
-    this.routes.use(authMiddleware);
+    // this.routes.use(authMiddleware);
   }
 
   securityFilter() {}
@@ -43,6 +44,11 @@ class Router {
       '/users',
       UserValidation.validateInsertUser,
       UserController.store
+    );
+    this.routes.post(
+      '/devices/:us_cpf',
+      UserValidation.validatePostDevice,
+      DeviceController.store
     );
   }
 }

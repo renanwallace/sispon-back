@@ -8,7 +8,9 @@ class UserDevice extends Model {
         id: {
           type: Sequelize.INTEGER,
           primaryKey: true,
+          autoIncrement: true,
         },
+        service_id: Sequelize.INTEGER,
         us_id: Sequelize.INTEGER,
         imei: Sequelize.STRING,
         number: Sequelize.STRING,
@@ -26,8 +28,7 @@ class UserDevice extends Model {
   static associate(models) {
     this.belongsTo(models.User, {
       foreignKey: 'us_id',
-      as: 'user',
-      through: 'user_devices',
+      as: 'users',
     });
   }
 }

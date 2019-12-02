@@ -10,6 +10,7 @@ class UserController {
       us_admin,
       us_company,
       us_tel,
+      us_other_tel,
       us_name,
       us_email,
       us_cpf,
@@ -21,6 +22,8 @@ class UserController {
     const emailUsed = await User.findOne({ where: { us_email } });
     const cpfUsed = await User.findOne({ where: { us_cpf } });
     const rgUsed = await User.findOne({ where: { us_rg } });
+    const telUsed = await User.findOne({ where: { us_tel } });
+    const secondTelUsed = await User.findOne({ where: { us_other_tel } });
 
     if (emailUsed) {
       return res.status(400).json({
@@ -40,6 +43,18 @@ class UserController {
       });
     }
 
+    if (telUsed) {
+      return res.status(400).json({
+        user_message: 'Telefone já utilizado',
+      });
+    }
+
+    if (secondTelUsed) {
+      return res.status(400).json({
+        user_message: 'Telefone outros já utilizado',
+      });
+    }
+
     const user = await User.create(
       {
         fun_id,
@@ -52,6 +67,7 @@ class UserController {
         us_rg,
         password,
         address,
+        us_other_tel,
       },
       {
         include: [
@@ -61,13 +77,13 @@ class UserController {
           },
           {
             model: UserDevice,
-            as: 'user_devices',
+            as: 'devices',
           },
         ],
       }
-    );
+    ).catch(console.log);
 
-    return res.send(user);
+    return res.json(user);
   }
 
   // GET: /users
@@ -81,7 +97,7 @@ class UserController {
         },
         {
           model: UserDevice,
-          as: 'user_devices',
+          as: 'devices',
         },
       ],
     });
@@ -127,6 +143,38 @@ class UserController {
         user_message: 'Nenhum usuário encontrado!',
       });
     }
+    return res.json(user);
+  }
+
+  async storeDevice(req, res) {
+    const { us_cpf, imei, service_id, number } = req;
+    console.log(us_cpf, imei, service_id, number);
+    const userExists = await User.findAll({ where: { us_cpf } });
+
+    if (!userExists) {
+      return res.status(400).json({
+        error: '$ User not found!',
+        user_message: 'Nenhum usuário encontrado para o CPF informado!',
+      });
+    }
+
+    const user = await UserDevice.create(
+      {
+        us_cpf,
+        imei,
+        service_id,
+        number,
+      },
+      {
+        include: [
+          {
+            model: User,
+            as: 'users',
+          },
+        ],
+      }
+    ).catch(console.log);
+
     return res.json(user);
   }
 }

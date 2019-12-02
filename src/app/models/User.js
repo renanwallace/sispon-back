@@ -15,6 +15,7 @@ class User extends Model {
         us_admin: Sequelize.BOOLEAN,
         us_company: Sequelize.BOOLEAN,
         us_tel: Sequelize.STRING,
+        us_other_tel: Sequelize.STRING,
         us_name: Sequelize.STRING,
         us_email: Sequelize.STRING,
         us_cpf: Sequelize.STRING,
@@ -45,10 +46,9 @@ class User extends Model {
       as: 'address',
     });
 
-    this.belongsToMany(models.UserDevice, {
+    this.hasMany(models.UserDevice, {
       foreignKey: 'us_id',
       as: 'devices',
-      through: 'user_devices',
     });
   }
 

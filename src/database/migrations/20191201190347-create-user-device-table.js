@@ -18,9 +18,15 @@ module.exports = {
       imei: {
         type: Sequelize.STRING(20),
         allowNull: false,
+        unique: true,
       },
       number: {
         type: Sequelize.STRING(15),
+        allowNull: false,
+        unique: true,
+      },
+      service_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       created_at: {

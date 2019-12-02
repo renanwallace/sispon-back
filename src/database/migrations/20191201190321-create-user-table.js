@@ -21,6 +21,11 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      us_other_tel: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
+        unique: true,
+      },
       us_company: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,

@@ -22,10 +22,10 @@ class SessionController {
       });
     }
 
-    const { id, name } = user;
+    const { id, us_name } = user;
 
     return res.json({
-      user: { id, name, us_email },
+      user: { id, us_name, us_email },
       token: jwt.sign({ id }, authConfig.secret, {
         expiresIn: authConfig.expiresIn,
       }),

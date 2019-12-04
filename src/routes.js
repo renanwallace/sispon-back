@@ -24,7 +24,7 @@ class Router {
   }
 
   middleware() {
-    // this.routes.use(authMiddleware);
+    this.routes.use(authMiddleware);
   }
 
   securityFilter() {}

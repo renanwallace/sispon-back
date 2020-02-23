@@ -47,7 +47,9 @@ class DeviceController {
           },
         ],
       }
-    ).catch(console.log);
+    ).catch(err => {
+      throw res.status(500).json({ user_message: 'Erro interno', error: err });
+    });
 
     return res.json(user);
   }

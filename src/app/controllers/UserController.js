@@ -81,7 +81,9 @@ class UserController {
           },
         ],
       }
-    ).catch(console.log);
+    ).catch(err => {
+      throw res.status(500).json({ user_message: 'Erro interno', error: err });
+    });
 
     return res.json(user);
   }
@@ -148,7 +150,6 @@ class UserController {
 
   async storeDevice(req, res) {
     const { us_cpf, imei, service_id, number } = req;
-    console.log(us_cpf, imei, service_id, number);
     const userExists = await User.findAll({ where: { us_cpf } });
 
     if (!userExists) {
@@ -173,7 +174,9 @@ class UserController {
           },
         ],
       }
-    ).catch(console.log);
+    ).catch(err => {
+      throw res.status(500).json({ user_message: 'Erro interno', error: err });
+    });
 
     return res.json(user);
   }
